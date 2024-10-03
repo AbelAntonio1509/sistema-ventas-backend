@@ -14,13 +14,15 @@ router.post('/', async (req, res) => {
 });
 
 // Obtener todas las ventas
-router.get('/', async (req, res) => {
-  try {
-    const ventas = await Venta.find();
-    res.status(200).send(ventas);
-  } catch (error) {
-    res.status(500).send(error);
-  }
+router.post('/', async (req, res) => {
+    try {
+        const nuevaVenta = new Venta(req.body); // req.body debe contener los datos
+        await nuevaVenta.save(); // Guarda la nueva venta en la base de datos
+        res.status(201).send(nuevaVenta); // Responde con la nueva venta creada
+    } catch (error) {
+        console.error(error);
+        res.status(400).send({ error: 'Error al registrar la venta' });
+    }
 });
 
 // Eliminar una venta por ID
